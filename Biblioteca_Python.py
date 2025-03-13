@@ -59,7 +59,7 @@ while not terminar_operacion:
     print("\nBienvenido al Sistema de Gestión de Biblioteca")
     print("1. Agregar un libro")
     print("2. Prestar un libro")
-    print("3. Devolver un libr")
+    print("3. Devolver un libro")
     print("4. Mostrar libros")
     print("5. Salir")
     eleccion : str = input("Elige una opción: ")
