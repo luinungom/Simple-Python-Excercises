@@ -1,5 +1,4 @@
 class Libro:
-    libros_totales = []
 
     # Método constructor
     def __init__(self, titulo: str, autor: str, isbn: str, disponible: bool = True):
@@ -9,15 +8,17 @@ class Libro:
         self.disponible: bool = disponible
 
     # Método para añadir un nuevo libro
-    def agregar(self, titulo, autor, isbn):
+    @staticmethod
+    def agregar(titulo, autor, isbn):
         nuevo_libro = Libro(titulo, autor, isbn)
-        self.libros_totales.append(nuevo_libro)
         print('Libro agregado con éxito.')
+        return nuevo_libro
 
     # Método para prestar un libro, cambia su atributo disponible a False si está disponible, de lo contratrio muestra "El libro ya estaba prestado"
-    def prestar(self, isbn):
+    @staticmethod
+    def prestar(isbn, libros_totales):
         isbn_existe = False
-        for libro in Libro.libros_totales:
+        for libro in libros_totales:
             if libro.isbn == isbn:
                 isbn_existe = True
                 if libro.disponible:
@@ -25,14 +26,15 @@ class Libro:
                     print('Libro prestado con éxito.')
                 else:
                     print('El libro ya estaba prestado')
-            break #Una vez encontrado el libro se sale del bucle
+            break  # Una vez encontrado el libro se sale del bucle
         if not isbn_existe:
             print(f'El ISBN: {isbn} introducido no existe')
 
     # Método para devolver un libro, si no estaba prestado muestra "El libro ya estaba disponible" por pantalla
-    def devolver(self, isbn):
+    @staticmethod
+    def devolver(isbn, libros_totales):
         isbn_existe = False
-        for libro in Libro.libros_totales:
+        for libro in libros_totales:
             if libro.isbn == isbn:
                 isbn_existe = True
                 if not libro.disponible:
@@ -40,20 +42,23 @@ class Libro:
                     print('Libro devuelto con éxito.')
                 else:
                     print('El libro ya estaba disponible')
-            break #Una vez encontrado el libro se sale del bucle
+            break  # Una vez encontrado el libro se sale del bucle
         if not isbn_existe:
             print(f'El ISBN: {isbn} introducido no existe')
 
     # Método para mostrar todos los libros del sistema
-    def mostrar(self):
-        try:
-            for libro in self.libros_totales:
-                print(f'-{libro.titulo}({libro.autor}) - ISBN: {libro.isbn} - Disponible: {libro.disponible}')
-        except Exception as e:
+    @staticmethod
+    def mostrar(libros_totales):
+        if len(libros_totales) == 0:
             print('No hay libros en la biblioteca')
+        else:
+            for libro in libros_totales:
+                print(f'-{libro.titulo} ({libro.autor}) - ISBN: {libro.isbn} - Disponible: {'Si' if libro.disponible else 'No'}')
 
 
-terminar_operacion : bool = False
+## Iniciamos el programa ##
+terminar_operacion: bool = False
+libros_totales = []
 
 while not terminar_operacion:
     print("\nBienvenido al Sistema de Gestión de Biblioteca")
@@ -62,21 +67,24 @@ while not terminar_operacion:
     print("3. Devolver un libro")
     print("4. Mostrar libros")
     print("5. Salir")
-    eleccion : str = input("Elige una opción: ")
+    eleccion: str = input("Elige una opción: ")
 
     if eleccion == "1":
-        titulo : str = input("Introduce el título del libro: ")
-        autor : str = input("Introduce el autor del libro: ")
-        isbn : str = input("Introduce el ISBN del libro: ")
-        Libro.agregar(titulo, autor, isbn)
+        titulo: str = input("Introduce el título del libro: ")
+        autor: str = input("Introduce el autor del libro: ")
+        isbn: str = input("Introduce el ISBN del libro: ")
+        if not isbn.isdigit():
+            print("El ISBN solo puede contener caracteres numéricos")
+        else:
+            libros_totales.append(Libro.agregar(titulo, autor, isbn))
     elif eleccion == "2":
-        isbn : str = input("Introduce el ISBN del libro: ")
-        Libro.prestar(isbn)
+        isbn: str = input("Introduce el ISBN del libro: ")
+        Libro.prestar(isbn, libros_totales)
     elif eleccion == "3":
-        isbn : str = input("Introduce el ISBN del libro: ")
-        Libro.devolver(isbn)
+        isbn: str = input("Introduce el ISBN del libro: ")
+        Libro.devolver(isbn, libros_totales)
     elif eleccion == "4":
-        Libro.mostrar()
+        Libro.mostrar(libros_totales)
     elif eleccion == "5":
         terminar_operacion = True
     else:
