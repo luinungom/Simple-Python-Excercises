@@ -57,9 +57,12 @@ class Libro:
 
 
 ## Iniciamos el programa ##
+## Esta variable controla el bucle principal del programa ##
 terminar_operacion: bool = False
+## Creamos una lista de libros vacía ##
 libros_totales = []
 
+## Usamos un bucle para crear el menu principal, seguirá pidiendo opciones hasta que el usuario elija la opción 5 ##
 while not terminar_operacion:
     print("\nBienvenido al Sistema de Gestión de Biblioteca")
     print("1. Agregar un libro")
